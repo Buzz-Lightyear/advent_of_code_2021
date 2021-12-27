@@ -6,6 +6,26 @@ def print_board(board):
         print(' '.join([str(x) for x in row]))
     print("\n")
 
+def is_winning_board(board):
+    for row in board:
+        if ''.join([str(x) for x in row]) == '$$$$$':
+            return True
+
+    for j in range(5):
+        if board[0][j] == '$' and board[1][j] == '$' and board[2][j] == '$' and board[3][j] == '$' and board[4][j] == '$':
+            return True
+
+    return False
+
+def get_winning_board(board_dicts, board_list):
+    for number in NUMBERS:
+        for index, board in enumerate(board_dicts):
+            if number in board:
+                (i, j) = board[number]
+                board_list[index][i][j] = '$'
+                if is_winning_board(board_list[index]):
+                    return board_list[index], number
+
 def part1():
     board_list = []
     with open("boards.txt", "r") as f:
@@ -17,7 +37,6 @@ def part1():
             else:
                 board_list.append(current_board)
                 current_board = []
-        print_board(current_board)
         board_list.append(current_board)
     
     board_dicts = []
@@ -27,8 +46,16 @@ def part1():
             for j, value in enumerate(row):
                 curr_dict[value] = (i, j)
         board_dicts.append(curr_dict)
+
+    winning_board, number = get_winning_board(board_dicts, board_list)
+    print_board(winning_board)
+    unmarked_sum = 0
+    for row in winning_board:
+        for value in row:
+            if value != '$':
+                unmarked_sum += value
     
-    # print(board_dicts[-1])
+    print(number * unmarked_sum)
 
 if __name__ == '__main__':
     part1()
