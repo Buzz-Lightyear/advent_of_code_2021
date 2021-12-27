@@ -18,13 +18,23 @@ def is_winning_board(board):
     return False
 
 def get_winning_board(board_dicts, board_list):
+    winning_indices = []
+    winning_indices_set = set()
+    winning_number = {}
     for number in NUMBERS:
         for index, board in enumerate(board_dicts):
             if number in board:
                 (i, j) = board[number]
                 board_list[index][i][j] = '$'
                 if is_winning_board(board_list[index]):
-                    return board_list[index], number
+                    if index not in winning_indices_set:
+                        winning_indices.append(index)
+                        winning_indices_set.add(index)
+                        winning_number[index] = number
+                        if len(winning_indices) == len(board_list):
+                            return board_list[index], number
+    
+
 
 def part1():
     board_list = []
