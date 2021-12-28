@@ -7,7 +7,8 @@ min_pos = min(positions)
 def get_fuel_used(positions, pos):
     count = 0
     for p in positions:
-        count += abs(p-pos)
+        n = abs(p-pos)
+        count += n*(n+1)/2
     return count
 
 min_fuel = sys.maxsize
